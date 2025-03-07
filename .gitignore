@@ -1,0 +1,25 @@
+.env
+#Buidler files
+cache
+artifacts
+node_modules
+dist/
+build/
+.vscode
+.idea
+/types
+
+deployed-contracts.json
+
+coverage
+.coverage_artifacts
+.coverage_cache
+.coverage_contracts
+
+.DS_Store
+.deployments
+
+electrolend-ui/node_modules
+electrolend-ui/dist
+electrolend-ui/build
+electrolend-ui/public/build

@@ -1,0 +1,8 @@
+{
+  "contract": "LendingPoolAddressesProviderRegistry",
+  "transactionHash": "0x58e97931c29f3634ded24f8051a7721767d9d479d56c0750741231fc89266a9a",
+  "expectedAddress": "0x09308a46cb03915a530Cf4365078a3688ec90682",
+  "nonce": 1711,
+  "timestamp": "2025-03-07T02:08:30.644Z",
+  "deployer": "0x917999645773E99d03d44817B7318861F018Cb74"
+}

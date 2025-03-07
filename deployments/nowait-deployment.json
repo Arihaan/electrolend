@@ -1,0 +1,9 @@
+{
+  "contract": "LendingPoolAddressesProviderRegistry",
+  "expectedAddress": "0x09308a46cb03915a530Cf4365078a3688ec90682",
+  "transactionHash": "0x09b6165b5ec4673d963d74e42245d5fe03b8956151071f09bb42fb4ee146f5f4",
+  "deployer": "0x917999645773E99d03d44817B7318861F018Cb74",
+  "nonce": 1711,
+  "gasPrice": "100.0",
+  "timestamp": "2025-03-07T02:32:06.202Z"
+}

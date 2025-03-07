@@ -1,0 +1,43 @@
+DIRECT HARDHAT CONSOLE DEPLOYMENT INSTRUCTIONS
+
+Instead of using scripts, let's use Hardhat console to deploy directly. Follow these steps:
+
+1. Start the Hardhat console connected to Electroneum testnet:
+```
+npx hardhat console --network testnet
+```
+
+2. Once in the console, run the following commands one by one:
+
+// Get deployer account
+const [deployer] = await ethers.getSigners();
+console.log("Deploying with", await deployer.getAddress());
+
+// Check balance
+console.log("Balance:", ethers.utils.formatEther(await deployer.getBalance()));
+
+// Get the factory for LendingPoolAddressesProviderRegistry
+const RegistryFactory = await ethers.getContractFactory("LendingPoolAddressesProviderRegistry");
+
+// Deploy with 50 gwei gas price to ensure it goes through
+const registry = await RegistryFactory.deploy(
+  await deployer.getAddress(),
+  { 
+    gasPrice: ethers.utils.parseUnits("50", "gwei"), 
+    gasLimit: 4000000
+  }
+);
+
+// Log the transaction hash
+console.log("Transaction hash:", registry.deployTransaction.hash);
+
+// Wait for deployment to be confirmed
+console.log("Waiting for confirmation...");
+await registry.deployed();
+
+// Verify the contract was actually deployed
+console.log("Deployed to:", registry.address);
+console.log("Owner:", await registry.owner());
+
+// Exit the console when done
+.exit 
