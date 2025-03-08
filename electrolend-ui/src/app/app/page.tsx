@@ -590,9 +590,9 @@ export default function Dashboard() {
   
   return (
     <Layout>
-      <div className="bg-gray-50 dark:bg-dark-bg min-h-screen">
+      <div className="bg-gray-50 dark:bg-dark-bg">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col space-y-8">
+          <div className="flex flex-col space-y-6">
             {/* Dashboard Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
@@ -617,7 +617,7 @@ export default function Dashboard() {
                 {/* User Position Overview */}
                 <div className="bg-white dark:bg-dark-surface shadow-sm rounded-lg p-6">
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Your Position</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {/* Net Worth */}
                     <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                       <p className="text-sm text-gray-500 dark:text-gray-400">Net Worth</p>
@@ -664,7 +664,7 @@ export default function Dashboard() {
                   </div>
                   
                   {/* User Assets */}
-                  <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Supplied Assets */}
                     <div>
                       <h3 className="text-md font-medium text-gray-900 dark:text-white mb-3">Your Supplied Assets</h3>
@@ -810,7 +810,6 @@ export default function Dashboard() {
                 </Link>
               </div>
             )}
-            
           </div>
         </div>
       </div>
