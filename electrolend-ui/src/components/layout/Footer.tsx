@@ -23,7 +23,7 @@ const navigation = {
   ],
   community: [
     { name: 'Discord', href: '#' },
-    { name: 'Twitter', href: '#' },
+    { name: 'X', href: '#' },
     { name: 'Blog', href: '#' },
   ],
 }
@@ -57,14 +57,14 @@ export default function Footer() {
             <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">
               Decentralized, non-custodial liquidity protocol for earning interest on deposits and borrowing assets.
             </p>
-            <div className="flex space-x-6">
+            {/* <div className="flex space-x-6">
               {socialLinks.map((item) => (
                 <Link key={item.name} href={item.href} className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200">
                   <span className="sr-only">{item.name}</span>
                   <item.icon className="h-6 w-6" aria-hidden="true" />
                 </Link>
               ))}
-            </div>
+            </div> */}
           </div>
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">

@@ -136,7 +136,4 @@ h1, h2, h3, h4, h5, h6 {
   @apply text-dark-secondary;
 }
 
-/* We're adding a dark mode toggle button */
-.theme-toggle-btn {
-  @apply fixed z-50 bottom-4 left-4 p-2 rounded-full bg-dark-blue-100 dark:bg-dark-blue-900 text-dark-blue-900 dark:text-dark-blue-100 shadow-md transition-all duration-300;
-} 
+/* Theme toggle button removed - dark mode only */ 

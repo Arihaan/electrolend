@@ -142,8 +142,8 @@ export default function Home() {
                   >
                     Launch App
                   </Link>
-                  <Link href="#features" className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-300 flex items-center">
-                    Learn more <ArrowSmallRightIcon className="h-4 w-4 ml-1" />
+                  <Link href="https://x.com/intent/user?screen_name=electrolend" className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-300 flex items-center">
+                    Follow us on 𝕏 for updates<ArrowSmallRightIcon className="h-4 w-4 ml-1" />
                   </Link>
                 </div>
               </div>
@@ -163,7 +163,7 @@ export default function Home() {
                       <div key={asset.symbol} className="rounded-lg bg-white/10 p-4 backdrop-blur-sm hover:bg-white/20 transition-colors">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-3">
-                            <div className={`relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r ${asset.color} overflow-hidden`}>
+                            <div className={`relative flex h-10 w-10 items-center justify-center rounded-full overflow-hidden`}>
                               <Image
                                 src={asset.logoSrc}
                                 alt={`${asset.name} logo`}
@@ -261,9 +261,21 @@ export default function Home() {
             >
               Launch App
             </Link>
-            <Link href="#" className="text-sm font-semibold leading-6 text-white">
-              Learn more <span aria-hidden="true">→</span>
-            </Link>
+            <a 
+              href="https://x.com/intent/user?screen_name=electrolend" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center text-sm font-semibold leading-6 text-white hover:text-blue-100 transition-colors"
+            >
+              <svg 
+                viewBox="0 0 24 24" 
+                aria-hidden="true" 
+                className="h-5 w-5 mr-2 fill-current"
+              >
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+              </svg>
+              Follow us on X
+            </a>
           </div>
         </div>
       </div>
