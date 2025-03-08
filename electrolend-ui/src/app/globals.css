@@ -2,15 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base styles */
+:root {
+  --foreground-rgb: 15, 23, 42;
+  --background-rgb: 249, 250, 251;
+}
+
+.dark {
+  --foreground-rgb: 243, 244, 246;
+  --background-rgb: 11, 17, 29;
+}
+
 html {
+  height: 100%;
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: #f9fafb;
-  color: #111827;
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
   min-height: 100vh;
+  @apply antialiased dark:text-dark-text dark:bg-dark-bg;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -102,4 +113,30 @@ h1, h2, h3, h4, h5, h6 {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* Dark mode overrides */
+.dark .card {
+  @apply bg-dark-surface border-dark-border shadow-lg;
+}
+
+.dark .btn-primary {
+  @apply bg-dark-blue-600 hover:bg-dark-blue-700 text-white;
+}
+
+.dark .btn-secondary {
+  @apply bg-dark-blue-100 hover:bg-dark-blue-200 text-dark-blue-800;
+}
+
+.dark input, .dark textarea, .dark select {
+  @apply bg-dark-surface border-dark-border text-dark-text;
+}
+
+.dark input::placeholder, .dark textarea::placeholder {
+  @apply text-dark-secondary;
+}
+
+/* We're adding a dark mode toggle button */
+.theme-toggle-btn {
+  @apply fixed z-50 bottom-4 left-4 p-2 rounded-full bg-dark-blue-100 dark:bg-dark-blue-900 text-dark-blue-900 dark:text-dark-blue-100 shadow-md transition-all duration-300;
 } 

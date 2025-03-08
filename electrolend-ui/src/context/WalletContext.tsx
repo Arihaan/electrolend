@@ -2,7 +2,22 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { ethers } from 'ethers';
-import * as web3 from '../utils/web3';
+import { 
+  depositToken, 
+  withdrawToken, 
+  borrowToken, 
+  repayToken, 
+  getTokenBalance, 
+  getDepositedAmount,
+  getUserAccountInfo,
+  getTokenAddress,
+  getTokenSymbol,
+  ETN_ADDRESS,
+  USDC_ADDRESS,
+  USDT_ADDRESS
+} from '../utils/lendingService';
+import { initializeWeb3 } from '../utils/web3';
+import { useToast } from '../components/common/Toast';
 
 // Define context types
 type WalletContextType = {
@@ -13,12 +28,12 @@ type WalletContextType = {
   connecting: boolean;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
-  depositToken: (tokenAddress: string, amount: string) => Promise<any>;
-  withdrawToken: (tokenAddress: string, amount: string) => Promise<any>;
-  borrowToken: (tokenAddress: string, amount: string) => Promise<any>;
-  repayToken: (tokenAddress: string, amount: string) => Promise<any>;
-  getTokenBalance: (tokenAddress: string) => Promise<string>;
-  getUserDeposits: (tokenAddress: string) => Promise<string>;
+  depositToken: (tokenSymbol: string, amount: string) => Promise<any>;
+  withdrawToken: (tokenSymbol: string, amount: string) => Promise<any>;
+  borrowToken: (tokenSymbol: string, amount: string) => Promise<any>;
+  repayToken: (tokenSymbol: string, amount: string) => Promise<any>;
+  getTokenBalance: (tokenSymbol: string) => Promise<string>;
+  getUserDeposits: (tokenSymbol: string) => Promise<string>;
   accountInfo: {
     collateralValue: string;
     borrowValue: string;
@@ -37,10 +52,10 @@ const defaultContext: WalletContextType = {
   connecting: false,
   connectWallet: async () => {},
   disconnectWallet: () => {},
-  depositToken: async () => ({}),
-  withdrawToken: async () => ({}),
-  borrowToken: async () => ({}),
-  repayToken: async () => ({}),
+  depositToken: async () => false,
+  withdrawToken: async () => false,
+  borrowToken: async () => false,
+  repayToken: async () => false,
   getTokenBalance: async () => '0',
   getUserDeposits: async () => '0',
   accountInfo: null,
@@ -60,6 +75,7 @@ export const useWallet = () => useContext(WalletContext);
 
 // Provider component
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
+  const { showToast } = useToast();
   const [isConnected, setIsConnected] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
   const [balance, setBalance] = useState<string | null>(null);
@@ -102,7 +118,16 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     };
 
     const handleChainChanged = (chainId: string) => {
-      setChainId(parseInt(chainId, 16));
+      const newChainId = parseInt(chainId, 16);
+      setChainId(newChainId);
+      
+      // Check if we're on Electroneum Testnet (chain ID 5201420)
+      if (newChainId === 5201420) {
+        // Show toast for connected to Electroneum Testnet
+      } else {
+        // Show toast for please switch to Electroneum Testnet
+      }
+      
       window.location.reload();
     };
 
@@ -135,10 +160,24 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setConnecting(true);
     
     try {
-      const { provider, signer } = await web3.initializeWeb3();
+      // Check if MetaMask or another wallet is installed
+      if (typeof window === 'undefined' || !window.ethereum) {
+        // Show toast for no Ethereum wallet detected
+        throw new Error('No Ethereum wallet detected. Please install MetaMask or another wallet.');
+      }
+      
+      // Initialize web3 connection
+      const web3Info = await initializeWeb3();
+      const provider = web3Info.provider;
+      const signer = web3Info.signer;
       
       // Get account
       const accounts = await provider.listAccounts();
+      if (!accounts || accounts.length === 0) {
+        // Show toast for no accounts found
+        throw new Error('No accounts found. Please unlock your wallet and try again.');
+      }
+      
       const currentAddress = accounts[0];
       
       // Get chain ID
@@ -156,8 +195,12 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       await refreshAccountInfo();
       
       setIsConnected(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error connecting wallet:', error);
+      // Reset state on error
+      disconnectWallet();
+      
+      // Show error to user
     } finally {
       setConnecting(false);
     }
@@ -178,11 +221,53 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     try {
       if (!isConnected && !address) return;
       
-      const info = await web3.getUserAccountInfo();
+      const info = await getUserAccountInfo();
       setAccountInfo(info);
     } catch (error) {
       console.error('Error fetching account info:', error);
     }
+  };
+
+  // Helper function to get token address from symbol or address
+  const getTokenAddressHelper = (tokenSymbolOrAddress: string): string => {
+    // Check if the input is already an address
+    if (tokenSymbolOrAddress.startsWith('0x') && tokenSymbolOrAddress.length > 10) {
+      // It's an address, use it directly
+      return tokenSymbolOrAddress;
+    } else {
+      // It's a symbol, convert to address
+      return getTokenAddress(tokenSymbolOrAddress);
+    }
+  };
+
+  const handleDepositToken = async (tokenSymbol: string, amount: string) => {
+    const tokenAddress = getTokenAddressHelper(tokenSymbol);
+    return await depositToken(tokenAddress, amount);
+  };
+
+  const handleWithdrawToken = async (tokenSymbol: string, amount: string) => {
+    const tokenAddress = getTokenAddressHelper(tokenSymbol);
+    return await withdrawToken(tokenAddress, amount);
+  };
+
+  const handleBorrowToken = async (tokenSymbol: string, amount: string) => {
+    const tokenAddress = getTokenAddressHelper(tokenSymbol);
+    return await borrowToken(tokenAddress, amount);
+  };
+
+  const handleRepayToken = async (tokenSymbol: string, amount: string) => {
+    const tokenAddress = getTokenAddressHelper(tokenSymbol);
+    return await repayToken(tokenAddress, amount);
+  };
+
+  const handleGetTokenBalance = async (tokenSymbol: string) => {
+    const tokenAddress = getTokenAddressHelper(tokenSymbol);
+    return await getTokenBalance(tokenAddress);
+  };
+
+  const handleGetUserDeposits = async (tokenSymbol: string) => {
+    const tokenAddress = getTokenAddressHelper(tokenSymbol);
+    return await getDepositedAmount(tokenAddress);
   };
 
   // Context value
@@ -194,12 +279,12 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     connecting,
     connectWallet,
     disconnectWallet,
-    depositToken: web3.depositToken,
-    withdrawToken: web3.withdrawToken,
-    borrowToken: web3.borrowToken,
-    repayToken: web3.repayToken,
-    getTokenBalance: web3.getTokenBalance,
-    getUserDeposits: web3.getUserDeposits,
+    depositToken: handleDepositToken,
+    withdrawToken: handleWithdrawToken,
+    borrowToken: handleBorrowToken,
+    repayToken: handleRepayToken,
+    getTokenBalance: handleGetTokenBalance,
+    getUserDeposits: handleGetUserDeposits,
     accountInfo,
     refreshAccountInfo,
   };

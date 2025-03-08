@@ -5,6 +5,7 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   safelist: [
     'bg-gray-50',
     'bg-gray-100',
@@ -79,6 +80,23 @@ module.exports = {
           900: '#4c1d95',
           950: '#2e1065',
         },
+        'dark-bg': '#0B111D',
+        'dark-surface': '#111827',
+        'dark-border': '#1F2937',
+        'dark-text': '#F3F4F6',
+        'dark-secondary': '#9CA3AF',
+        'dark-blue': {
+          50: '#E6F0FF',
+          100: '#BFDBFE',
+          200: '#93C5FD',
+          300: '#60A5FA',
+          400: '#3B82F6',
+          500: '#2563EB',
+          600: '#1D4ED8',
+          700: '#1E40AF',
+          800: '#1E3A8A',
+          900: '#172554',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
@@ -90,6 +108,10 @@ module.exports = {
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
   },

@@ -43,30 +43,89 @@ let signer: ethers.Signer | null = null
 
 // Initialize provider and contracts
 export async function initializeWeb3() {
-  if (typeof window === 'undefined' || !window.ethereum) {
-    throw new Error('No ethereum provider found. Please install MetaMask.')
+  if (typeof window === 'undefined') {
+    throw new Error('Cannot connect wallet in server-side environment');
   }
   
-  // Connect to the provider
-  provider = new ethers.providers.Web3Provider(window.ethereum)
+  if (!window.ethereum) {
+    throw new Error('No Ethereum provider found. Please install MetaMask or another Ethereum wallet.');
+  }
   
-  // Request account access
-  await window.ethereum.request({ method: 'eth_requestAccounts' })
-  
-  // Get the signer
-  signer = provider.getSigner()
-  
-  // Initialize lending contract
-  lendingContract = new ethers.Contract(
-    CONTRACT_ADDRESSES.LENDING_CONTRACT,
-    simpleLendingABI,
-    signer
-  )
-  
-  return {
-    provider,
-    signer,
-    lendingContract
+  try {
+    // Connect to the provider
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    
+    // Request account access
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+    
+    // Check if we're on the correct network (Electroneum Testnet)
+    const network = await provider.getNetwork();
+    const electroneumTestnetId = 5201420; // Electroneum Testnet Chain ID
+    
+    if (network.chainId !== electroneumTestnetId) {
+      // Prompt user to switch networks
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x4F5CCC' }], // '0x4F5CCC' is hex for 5201420
+        });
+        
+        // Refresh provider after network switch
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+      } catch (switchError: any) {
+        // This error code indicates that the chain has not been added to MetaMask
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: '0x4F5CCC',
+                chainName: 'Electroneum Testnet',
+                nativeCurrency: {
+                  name: 'Electroneum',
+                  symbol: 'ETN',
+                  decimals: 18
+                },
+                rpcUrls: ['https://rpc.ankr.com/electroneum_testnet'],
+                blockExplorerUrls: ['https://testnet.explorer.electroneum.com/']
+              }]
+            });
+            
+            // Try switching again after adding
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: '0x4F5CCC' }],
+            });
+            
+            // Refresh provider after network switch
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+          } catch (addError) {
+            throw new Error('Failed to add Electroneum Testnet to your wallet. Please add it manually.');
+          }
+        } else {
+          throw new Error('Failed to switch to Electroneum Testnet. Please switch networks manually.');
+        }
+      }
+    }
+    
+    // Get the signer
+    signer = provider.getSigner();
+    
+    // Initialize lending contract
+    lendingContract = new ethers.Contract(
+      CONTRACT_ADDRESSES.LENDING_CONTRACT,
+      simpleLendingABI,
+      signer
+    );
+    
+    return {
+      provider,
+      signer,
+      lendingContract
+    };
+  } catch (error: any) {
+    console.error('Error initializing web3:', error);
+    throw new Error(error.message || 'Failed to connect wallet. Please try again.');
   }
 }
 

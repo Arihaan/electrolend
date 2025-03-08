@@ -33,8 +33,6 @@ Visit our platform at [electrolend.io](https://electrolend.io) to start lending 
 Join our community to stay updated on the latest developments:
 
 - Twitter: [@ElectroLend](https://twitter.com/ElectroLend)
-- Telegram: [ElectroLend Community](https://t.me/ElectroLend)
-- Discord: [ElectroLend Discord](https://discord.gg/electrolend)
 
 ## License
 

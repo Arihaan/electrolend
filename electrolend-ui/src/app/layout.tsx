@@ -1,12 +1,15 @@
+import type { Metadata } from 'next';
+import ClientWalletProvider from '../components/providers/ClientWalletProvider';
+import { ToastProvider } from '../components/common/Toast';
+import { ThemeProvider } from '../components/providers/ThemeProvider';
 import './globals.css';
 import { Inter } from 'next/font/google';
-import ClientWalletProvider from '../components/providers/ClientWalletProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'ElectroLend - Lending Protocol on Electroneum',
-  description: 'A decentralized lending protocol built on the Electroneum blockchain',
+export const metadata: Metadata = {
+  title: 'ElectroLend - Decentralized Lending on Electroneum',
+  description: 'ElectroLend is a decentralized lending platform on Electroneum, allowing users to borrow, lend, and earn interest on crypto assets.',
 };
 
 export default function RootLayout({
@@ -17,9 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ClientWalletProvider>
-          {children}
-        </ClientWalletProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            <ClientWalletProvider>
+              {children}
+            </ClientWalletProvider>
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
