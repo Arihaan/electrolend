@@ -3,6 +3,8 @@
 
 ElectroLend is a decentralized lending protocol built on the Electroneum blockchain, designed to bring DeFi lending services to the Electroneum ecosystem.
 
+![banner2](https://github.com/user-attachments/assets/0e6dd116-9816-459e-be1e-3d0d66a45bd3)
+
 ## Overview
 
 ElectroLend enables users to:
