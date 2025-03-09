@@ -67,7 +67,7 @@ export async function initializeWeb3() {
       try {
         await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x4F5CCC' }], // '0x4F5CCC' is hex for 5201420
+          params: [{ chainId: '0x4f5e0c' }], // '0x4f5e0c' is hex for 5201420
         });
         
         // Refresh provider after network switch
@@ -79,7 +79,7 @@ export async function initializeWeb3() {
             await window.ethereum.request({
               method: 'wallet_addEthereumChain',
               params: [{
-                chainId: '0x4F5CCC',
+                chainId: '0x4f5e0c',
                 chainName: 'Electroneum Testnet',
                 nativeCurrency: {
                   name: 'Electroneum',
@@ -94,7 +94,7 @@ export async function initializeWeb3() {
             // Try switching again after adding
             await window.ethereum.request({
               method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x4F5CCC' }],
+              params: [{ chainId: '0x4f5e0c' }],
             });
             
             // Refresh provider after network switch
