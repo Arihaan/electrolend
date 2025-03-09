@@ -87,7 +87,7 @@ export async function initializeWeb3() {
                   decimals: 18
                 },
                 rpcUrls: ['https://rpc.ankr.com/electroneum_testnet'],
-                blockExplorerUrls: ['blockexplorer.thesecurityteam.rocks/']
+                blockExplorerUrls: ['https://blockexplorer.thesecurityteam.rocks/']
               }]
             });
             
